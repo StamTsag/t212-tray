@@ -11,7 +11,8 @@ async function main() {
   // systray2 exports are weird - need to dig out the default
   const systrayModule = await import("systray2");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const SysTray = (systrayModule as any).default?.default ?? (systrayModule as any).default;
+  const SysTray =
+    (systrayModule as any).default?.default ?? (systrayModule as any).default;
 
   let currentConfig = buildTrayConfig("Loading T212 data...", true);
 
