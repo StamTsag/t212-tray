@@ -1,48 +1,38 @@
 # T212 Tray
 
-A system tray application to monitor your Trading212 account with real-time balance and P&L updates.
+System tray app for monitoring your Trading212 account. Shows total balance, cash available, and P&L - updates every 30 seconds.
 
 ## Features
 
-- System tray icon with live account info
-- Auto-updates every 30 seconds
-- P&L-based icon (up/down)
+- Live account info in system tray
+- Icon changes based on P&L (green up / red down)
+- Click to open Trading212 in browser
+- Works on Windows, macOS, Linux
 
-## Prerequisites
-
-- Node.js 16+
-- Trading212 account with API access
-
-## Installation
+## Setup
 
 ```bash
-# Install dependencies
 npm install
-
-# Build TypeScript
 npm run build
 ```
 
-## Configuration
+## Config
 
-1. Copy `.env.example` to `.env`:
-   ```bash
-   cp .env.example .env
-   ```
+Copy `.env.example` to `.env` and add your API credentials:
 
-2. Edit `.env` with your credentials:
-   ```env
-   TRADING212_API_KEY=your_api_key
-   TRADING212_API_SECRET=your_api_secret
-   TRADING212_BASE_URL=live.trading212.com
-   ```
+```env
+TRADING212_API_KEY=your_key
+TRADING212_API_SECRET=your_secret
+TRADING212_BASE_URL=live.trading212.com
+```
 
-## Development
+## Usage
 
 ```bash
-# Build and run
 npm run dev
 ```
+
+The icon appears in your system tray and updates automatically.
 
 ## License
 
