@@ -1,24 +1,44 @@
 import { describe, it, expect } from "vitest";
 import { formatAccountTooltip } from "./tray.js";
 
+interface Cash {
+  availableToTrade: number;
+  inPies: number;
+  reservedForOrders: number;
+}
+
+interface Investments {
+  currentValue: number;
+  realizedProfitLoss: number;
+  totalCost: number;
+  unrealizedProfitLoss: number;
+}
+
 interface AccountInfo {
-  total: number;
-  free: number;
-  ppl: number;
-  result: number;
-  blocked: number;
-  currencyCode?: string;
+  cash: Cash;
+  currency: string;
+  id: number;
+  investments: Investments;
+  totalValue: number;
 }
 
 describe("formatAccountTooltip", () => {
   it("formats positive P&L correctly", () => {
-    const info = {
-      total: 10000,
-      free: 5000,
-      ppl: 500,
-      result: 200,
-      blocked: 0,
-      currencyCode: "EUR",
+    const info: AccountInfo = {
+      cash: {
+        availableToTrade: 5000,
+        inPies: 0,
+        reservedForOrders: 0,
+      },
+      currency: "EUR",
+      id: 1,
+      investments: {
+        currentValue: 5000,
+        realizedProfitLoss: 0,
+        totalCost: 4500,
+        unrealizedProfitLoss: 500,
+      },
+      totalValue: 10000,
     };
 
     const result = formatAccountTooltip(info);
@@ -30,13 +50,21 @@ describe("formatAccountTooltip", () => {
   });
 
   it("formats negative P&L correctly", () => {
-    const info = {
-      total: 9000,
-      free: 4000,
-      ppl: -500,
-      result: -200,
-      blocked: 0,
-      currencyCode: "USD",
+    const info: AccountInfo = {
+      cash: {
+        availableToTrade: 4000,
+        inPies: 0,
+        reservedForOrders: 0,
+      },
+      currency: "USD",
+      id: 1,
+      investments: {
+        currentValue: 5000,
+        realizedProfitLoss: 0,
+        totalCost: 5500,
+        unrealizedProfitLoss: -500,
+      },
+      totalValue: 9000,
     };
 
     const result = formatAccountTooltip(info);
@@ -52,19 +80,5 @@ describe("formatAccountTooltip", () => {
 
     expect(result.tooltip).toBe("Failed to fetch T212 data");
     expect(result.isUp).toBe(true);
-  });
-
-  it("defaults currency to EUR when not provided", () => {
-    const info = {
-      total: 1000,
-      free: 500,
-      ppl: 0,
-      result: 0,
-      blocked: 0,
-    };
-
-    const result = formatAccountTooltip(info);
-
-    expect(result.tooltip).toContain("EUR");
   });
 });

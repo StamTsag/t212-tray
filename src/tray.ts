@@ -9,13 +9,25 @@ const __dirname = dirname(__filename);
 const OPEN_TRADING212_URL = "https://app.trading212.com/";
 
 // systray2 types are a mess, just use what we need
+interface Cash {
+  availableToTrade: number;
+  inPies: number;
+  reservedForOrders: number;
+}
+
+interface Investments {
+  currentValue: number;
+  realizedProfitLoss: number;
+  totalCost: number;
+  unrealizedProfitLoss: number;
+}
+
 interface AccountInfo {
-  total: number;
-  free: number;
-  ppl: number;
-  result: number;
-  blocked: number;
-  currencyCode?: string;
+  cash: Cash;
+  currency: string;
+  id: number;
+  investments: Investments;
+  totalValue: number;
 }
 
 function getIconPath(isUp: boolean): string {
@@ -80,11 +92,11 @@ export function formatAccountTooltip(info: AccountInfo | null): {
     return { tooltip: "Failed to fetch T212 data", isUp: true };
   }
 
-  const total = info.total.toFixed(2);
-  const cash = info.free.toFixed(2);
-  const pnl = info.ppl;
+  const total = info.totalValue.toFixed(2);
+  const cash = info.cash.availableToTrade.toFixed(2);
+  const pnl = info.investments.unrealizedProfitLoss;
   const pnlFormatted = pnl.toFixed(2);
-  const currency = info.currencyCode || "EUR";
+  const currency = info.currency;
 
   return {
     tooltip: `Total: ${currency} ${total}\nCash: ${currency} ${cash}\nP&L: ${currency} ${pnlFormatted}`,

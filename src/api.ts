@@ -1,20 +1,32 @@
 import * as https from "https";
 import { config, API_TIMEOUT_MS } from "./config.js";
 
+interface Cash {
+  availableToTrade: number;
+  inPies: number;
+  reservedForOrders: number;
+}
+
+interface Investments {
+  currentValue: number;
+  realizedProfitLoss: number;
+  totalCost: number;
+  unrealizedProfitLoss: number;
+}
+
 interface AccountInfo {
-  total: number;
-  free: number;
-  ppl: number;
-  result: number;
-  blocked: number;
-  currencyCode?: string;
+  cash: Cash;
+  currency: string;
+  id: number;
+  investments: Investments;
+  totalValue: number;
 }
 
 export function fetchAccountInfo(): Promise<AccountInfo | null> {
   return new Promise((resolve, reject) => {
     const options: https.RequestOptions = {
       hostname: config.baseUrl,
-      path: "/api/v0/equity/account/cash",
+      path: "/api/v0/equity/account/summary",
       method: "GET",
       headers: {
         Authorization: `Basic ${Buffer.from(config.credentials).toString("base64")}`,
